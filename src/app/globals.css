@@ -145,6 +145,57 @@ button {
   text-transform: uppercase;
 }
 
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-toggle {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: var(--muted);
+  background: #f2f4f3;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.field-toggle.on {
+  color: var(--teal);
+  border-color: rgba(15, 118, 110, 0.35);
+  background: var(--teal-2);
+}
+
+.field-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wide-toggle {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 11px;
+  color: var(--muted);
+  background: #fbfcfb;
+  text-align: left;
+  font-weight: 800;
+}
+
+.wide-toggle.on {
+  color: var(--teal);
+  border-color: rgba(15, 118, 110, 0.35);
+  background: var(--teal-2);
+}
+
+.wide-toggle:disabled {
+  color: #8a9390;
+  background: #eef1f0;
+  cursor: not-allowed;
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -156,6 +207,14 @@ button {
   background: #fbfcfb;
 }
 
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  color: #8a9390;
+  background: #eef1f0;
+  cursor: not-allowed;
+}
+
 .field textarea {
   resize: vertical;
   min-height: 86px;
@@ -165,6 +224,30 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+.agent-model-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.agent-model-field {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.agent-model-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.agent-model-field select {
+  min-width: 0;
+  padding: 8px;
+  font-size: 12px;
 }
 
 .run-button {
@@ -185,6 +268,10 @@ button {
 .run-button:disabled {
   opacity: 0.62;
   cursor: wait;
+}
+
+.run-button.stop {
+  background: #b4233a;
 }
 
 .main-grid {
@@ -228,6 +315,43 @@ button {
   box-shadow: 0 0 0 3px var(--teal-2);
 }
 
+.flow-node.running {
+  border-color: var(--blue);
+  background: #f4fbff;
+}
+
+.flow-node.running .node-icon {
+  color: white;
+  background: var(--blue);
+  animation: pulse 1.1s ease-in-out infinite;
+}
+
+.flow-node.complete .node-icon {
+  color: white;
+  background: var(--teal);
+}
+
+.flow-node.failed {
+  border-color: #e11d48;
+  background: #fff5f7;
+}
+
+.flow-node.failed .node-icon {
+  color: white;
+  background: #e11d48;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
 .node-top {
   display: flex;
   align-items: center;
@@ -265,6 +389,30 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
+}
+
+.prompt-panel {
+  grid-column: 1 / -1;
+}
+
+.prompt-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.prompt-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.prompt-box {
+  max-height: 260px;
+  white-space: pre-wrap;
 }
 
 .detail-panel,
@@ -399,6 +547,10 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .prompt-grid {
+    grid-template-columns: 1fr;
+  }
+
   .control-panel {
     position: static;
   }
@@ -421,6 +573,7 @@ button {
   }
 
   .form-row,
+  .agent-model-grid,
   .flow-canvas,
   .score-strip {
     grid-template-columns: 1fr;

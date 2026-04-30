@@ -1,3 +1,5 @@
+import { AgentModelMap } from "./models";
+
 export type Pace = "relaxed" | "balanced" | "intense";
 export type Budget = "low" | "medium" | "high";
 
@@ -6,8 +8,16 @@ export type TravelRequest = {
   days: number;
   budget: Budget;
   pace: Pace;
+  model: string;
+  agentModels: AgentModelMap;
+  webSearchEnabled: boolean;
   interests: string[];
   notes: string;
+};
+
+export type AgentPrompt = {
+  system: string;
+  user: string;
 };
 
 export type TravelerProfile = {
@@ -15,6 +25,9 @@ export type TravelerProfile = {
   days: number;
   budget: Budget;
   pace: Pace;
+  model: string;
+  agentModels: AgentModelMap;
+  webSearchEnabled: boolean;
   interests: string[];
   avoid: string[];
   dailyTimeBudgetHours: number;
@@ -93,16 +106,42 @@ export type EvaluationResult = {
   repairInstructions: string[];
 };
 
+export type AgentStepStatus = "pending" | "running" | "complete" | "warning" | "failed";
+
+export type AgentTokenUsage = {
+  inputTokens: number;
+  cachedInputTokens: number;
+  outputTokens: number;
+  reasoningTokens: number;
+  totalTokens: number;
+  costUsd?: number;
+};
+
+export type AgentExecutionMeta = {
+  provider: "openai" | "fallback";
+  webSearchRequested: boolean;
+  webSearchEnabled: boolean;
+  webSearchUsed: boolean;
+  webSearchQueries?: string[];
+  responseStatus?: string;
+  incompleteReason?: string;
+  fallbackReason?: string;
+};
+
 export type AgentStep = {
   id: string;
   title: string;
   role: string;
-  status: "complete" | "warning" | "failed";
+  model?: string;
+  status: AgentStepStatus;
+  prompt?: AgentPrompt;
   startedAt: string;
-  finishedAt: string;
+  finishedAt?: string;
   durationMs: number;
+  meta?: AgentExecutionMeta;
+  usage?: AgentTokenUsage;
   input: unknown;
-  output: unknown;
+  output?: unknown;
 };
 
 export type PipelineResult = {
@@ -113,3 +152,29 @@ export type PipelineResult = {
   validation: ValidationResult;
   iterations: number;
 };
+
+export type PipelineStepStartEvent = {
+  type: "step-start";
+  step: AgentStep;
+};
+
+export type PipelineStepCompleteEvent = {
+  type: "step-complete";
+  step: AgentStep;
+};
+
+export type PipelineCompleteEvent = {
+  type: "pipeline-complete";
+  result: PipelineResult;
+};
+
+export type PipelineErrorEvent = {
+  type: "pipeline-error";
+  error: string;
+};
+
+export type PipelineStreamEvent =
+  | PipelineStepStartEvent
+  | PipelineStepCompleteEvent
+  | PipelineCompleteEvent
+  | PipelineErrorEvent;
